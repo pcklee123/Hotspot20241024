@@ -7,7 +7,7 @@
                    // #define cylinder //do hot rod problem
 //#define quadrant   // do problem 1/4 sphere or cylinder
 #define Weibull
-constexpr float weibullb = 2; // b factor for weibull distribn. larger means closer to a shell. ~1 means filled more at the center.
+constexpr float weibullb = 1; // b factor for weibull distribn. larger means closer to a shell. ~1 means filled more at the center.
 #define Temp_e 7e6            // in Kelvin 1e7 ~1keV
 #define Temp_d 7e6            // in Kelvin
 constexpr int f1 = 1000;      // make bigger to make smaller time steps // 300 is min for sphere slight increase in KE
@@ -33,7 +33,7 @@ constexpr float Ez0 = 0.0e0;       // in V/m
 constexpr float vz0 = 0.0f;
 constexpr float a0 = 4e-5;                          // typical dimensions of a cell in m This needs to be smaller than debye length otherwise energy is not conserved if a particle moves across a cell
 constexpr float a0_ff = 1.0 + 1.0 / (float)n_space; // rescale cell size, if particles rollover this cannot encrement more than 1 cell otherwise will have fake "waves"
-constexpr float target_part = 1e12;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
+constexpr float target_part = 1e10;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
 constexpr float v0_r = 0;                           // initial directed radial velocity outwards is positive
 
 // The maximum expected E and B fields. If fields go beyond this, the the time step, cell size etc will be wrong. Should adjust and recalculate.
