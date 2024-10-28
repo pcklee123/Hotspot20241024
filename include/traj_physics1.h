@@ -46,7 +46,7 @@ constexpr float Emax0 = Ez0 + 1;                // 1e11V/m is approximately inte
 // Te 1e7,Td 1e7,B 0.1,E 1e8,nback 64, a0 0.1e-3,part 1e10,nspace 32 npartd *4 sphere, r1=1.8
 // a sphere 0.4 mm radius with 1e24*4/3*pi()*0.4^3 *1.6e-19C E on surface =2.4e12Vm-1 if all electrons have left.
 // r0=8*a0 Te 1e7,Td 1e7,B 100,E 1e10,nback 64, a0 1e-3,part 1e15,nspace 64 npartd *4 cylinder
-constexpr int ndatapoints = 10; // total number of time steps to print
+constexpr int ndatapoints = 20; // total number of time steps to print
 constexpr int nc1 = 200;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
 constexpr int md_me = 60;       // ratio of electron speed/deuteron speed at the same KE. Used to calculate electron motion more often than deuteron motion
 #define Hist_n 512
