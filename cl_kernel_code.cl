@@ -492,7 +492,7 @@ void kernel tnp_k_implicitz(global const float8 *a1,
   //yprev = y < YH ? yprev : YH;
   zprev = z > ZL ? zprev : zprev + ZDZ;
   zprev = z < ZH ? zprev : zprev - ZDZ;
-  q[id] = (x > XL & x<XH & y> YL & y < YH) ? q[id] : 0;
+  q[id] = (x > XL && x<XH && y> YL && y < YH) ? q[id] : 0;
   //x = x > XL ? x : XL;
   //x = x < XH ? x : XH;
   //y = y > YL ? y : YL;
