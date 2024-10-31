@@ -19,9 +19,9 @@ constexpr int n_space = 128; // should be 2 to power of n for faster FFT e.g. 32
 
 constexpr size_t n_partd =16 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n
 constexpr size_t n_parte = n_partd;
-constexpr size_t nback = n_partd *.98; // background stationary particles distributed over all cells - improves stability
+constexpr size_t nback = n_partd *1; // background stationary particles distributed over all cells - improves stability
 //size of background cylinder for sphere
-constexpr size_t nback_cy = nback * 0.9;
+constexpr size_t nback_cy = nback * 1;
 constexpr size_t nback_cube = nback - nback_cy;
 
 constexpr float R_s = n_space / 1;                                                            // Low Pass Filter smoothing radius. Not in use
@@ -30,10 +30,10 @@ constexpr float r0_f[3] = {(float)n_space / 8.0, (float)n_space / 8.0, (float)n_
 constexpr float Bz0 = 0.00000;     // in T, static constant fields
 constexpr float Btheta0 = 0.00000; // in T, static constant fields
 constexpr float Ez0 = 0.0e0;       // in V/m
-constexpr float vz0 = 0.0f;
+constexpr float vz0 = 2e7f;
 constexpr float a0 = 4e-5;                          // typical dimensions of a cell in m This needs to be smaller than debye length otherwise energy is not conserved if a particle moves across a cell
 constexpr float a0_ff = 1.0 + 1.0 / (float)n_space; // rescale cell size, if particles rollover this cannot encrement more than 1 cell otherwise will have fake "waves"
-constexpr float target_part = 1e16;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
+constexpr float target_part = 1e11;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
 constexpr float v0_r = 0;                           // initial directed radial velocity outwards is positive
 
 // The maximum expected E and B fields. If fields go beyond this, the the time step, cell size etc will be wrong. Should adjust and recalculate.
@@ -46,8 +46,8 @@ constexpr float Emax0 = Ez0 + 1;                // 1e11V/m is approximately inte
 // Te 1e7,Td 1e7,B 0.1,E 1e8,nback 64, a0 0.1e-3,part 1e10,nspace 32 npartd *4 sphere, r1=1.8
 // a sphere 0.4 mm radius with 1e24*4/3*pi()*0.4^3 *1.6e-19C E on surface =2.4e12Vm-1 if all electrons have left.
 // r0=8*a0 Te 1e7,Td 1e7,B 100,E 1e10,nback 64, a0 1e-3,part 1e15,nspace 64 npartd *4 cylinder
-constexpr int ndatapoints = 50; // total number of time steps to print
-constexpr int nc1 = 25;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
+constexpr int ndatapoints = 10; // total number of time steps to print
+constexpr int nc1 = 19;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
 constexpr int md_me = 60;       // ratio of electron speed/deuteron speed at the same KE. Used to calculate electron motion more often than deuteron motion
 #define Hist_n 512
 // #define Hist_max Temp_e / 11600 * 60 // in eV Kelvin to eV is divide by 11600
