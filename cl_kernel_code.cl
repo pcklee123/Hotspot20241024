@@ -423,7 +423,7 @@ void kernel tnp_k_implicitz(global const float8 *a1,
               ZL = (ZLOW + 1.5f * DZ);
   const float XH = (XHIGH - 1.5f * DX), YH = (YHIGH - 1.5f * DY),
               ZH = (ZHIGH - 1.5f * DZ);
-  const float ZDZ = ZH - ZL;// - DZ / 10;
+  const float ZDZ = ZH - ZL - DZ ;
   const float8 ones = (float8)(1, 1, 1, 1, 1, 1, 1, 1);
   for (uint t = 0; t < ncalc; t++) {
     float xy = x * y, xz = x * z, yz = y * z, xyz = x * yz;
