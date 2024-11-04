@@ -377,7 +377,7 @@ void kernel tnp_k_implicit(global const float8 *a1,
   yprev = y < YH ? yprev : YH;
   zprev = z > ZL ? zprev : ZL;
   zprev = z < ZH ? zprev : ZH;
-  q[id] = (x > XL & x<XH & y> YL & y<YH & z> ZL & z < ZH) ? q[id] : 0;
+  q[id] = (x > XL & x < XH & y > YL & y < YH & z > ZL & z < ZH) ? q[id] : 0;
   x = x > XL ? x : XL;
   x = x < XH ? x : XH;
   y = y > YL ? y : YL;
@@ -420,10 +420,10 @@ void kernel tnp_k_implicitz(global const float8 *a1,
   const float XHIGH = XHIGHo * a0_f, YHIGH = YHIGHo * a0_f,
               ZHIGH = ZHIGHo * a0_f;
   const float XL = (XLOW + 1.5f * DX), YL = (YLOW + 1.5f * DY),
-              ZL = (ZLOW + 1.5f * DZ);
+              ZL = (ZLOW + 1.5f * DZ), ZLo = (ZLOWo + 1.5f * DZo);
   const float XH = (XHIGH - 1.5f * DX), YH = (YHIGH - 1.5f * DY),
-              ZH = (ZHIGH - 1.5f * DZ);
-  const float ZDZ = ZH - ZL - DZ ;
+              ZH = (ZHIGH - 1.5f * DZ), ZHo = (ZHIGHo - 1.5f * DZo);
+  const float ZDZ = ZH - ZL - DZ, ZDZo = ZHo - ZLo - DZo;
   const float8 ones = (float8)(1, 1, 1, 1, 1, 1, 1, 1);
   for (uint t = 0; t < ncalc; t++) {
     float xy = x * y, xz = x * z, yz = y * z, xyz = x * yz;
@@ -486,19 +486,23 @@ void kernel tnp_k_implicitz(global const float8 *a1,
              vz);
   }
 
-  //xprev = x > XL ? xprev : XL;
-  //xprev = x < XH ? xprev : XH;
-  //yprev = y > YL ? yprev : YL;
-  //yprev = y < YH ? yprev : YH;
+  // xprev = x > XL ? xprev : XL;
+  // xprev = x < XH ? xprev : XH;
+  // yprev = y > YL ? yprev : YL;
+  // yprev = y < YH ? yprev : YH;
+  // zprev = z > ZLo ? zprev : zprev + ZDZo;
+  // zprev = z < ZHo ? zprev : zprev - ZDZo;
+  // z = z > ZLo ? z : z + ZDZo;
+  // z = z < ZHo ? z : z - ZDZo;
   zprev = z > ZL ? zprev : zprev + ZDZ;
   zprev = z < ZH ? zprev : zprev - ZDZ;
-  q[id] = (x > XL & x<XH & y> YL & y < YH) ? q[id] : 0;
-  //x = x > XL ? x : XL;
-  //x = x < XH ? x : XH;
-  //y = y > YL ? y : YL;
-  //y = y < YH ? y : YH;
   z = z > ZL ? z : z + ZDZ;
   z = z < ZH ? z : z - ZDZ;
+  q[id] = (x > XL & x < XH & y > YL & y < YH) ? q[id] : 0;
+  // x = x > XL ? x : XL;
+  // x = x < XH ? x : XH;
+  // y = y > YL ? y : YL;
+  // y = y < YH ? y : YH;
 
   x0[id] = xprev;
   y0[id] = yprev;

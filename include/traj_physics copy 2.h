@@ -7,38 +7,38 @@
                    // #define cylinder //do hot rod problem
 //#define quadrant   // do problem 1/4 sphere or cylinder
 #define Weibull
-constexpr float weibullb = 2; // b factor for weibull distribn. larger means closer to a shell. ~1 means filled more at the center.
+constexpr float weibullb = 1; // b factor for weibull distribn. larger means closer to a shell. ~1 means filled more at the center.
 #define Temp_e 7e6            // in Kelvin 1e7 ~1keV
 #define Temp_d 7e6            // in Kelvin
-constexpr int f1 = 4000;      // make bigger to make smaller time steps // 300 is min for sphere slight increase in KE
+constexpr int f1 = 2000;      // make bigger to make smaller time steps // 300 is min for sphere slight increase in KE
 constexpr int f2 = f1 * 1.2;
 constexpr float incf = 1.2f;        // increment
 constexpr float decf = 1.0f / incf; // decrement factor
 
 constexpr int n_space = 128; // should be 2 to power of n for faster FFT e.g. 32,64,128,256 (128 is 2 million cells, ~ 1gB of ram, 256 is not practical for systems with 8GB or less GPU ram) dont go below 16. some code use 16vectors
 
-constexpr size_t n_partd =64 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n keep below 64*1024*1024 for 8GB GPU if n_space=128
+constexpr size_t n_partd = 64 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n
 constexpr size_t n_parte = n_partd;
-constexpr size_t nback = n_partd /2; // background stationary particles distributed over all cells - improves stability
+constexpr size_t nback = n_partd *1; // background stationary particles distributed over all cells - improves stability
 //size of background cylinder for sphere
-constexpr size_t nback_cy = nback *0;
-constexpr size_t nback_cube = nback - nback_cy;
+constexpr size_t nback_cy = n_partd * 1;
+constexpr size_t nback_cube = nback-nback_cy;
 
 constexpr float R_s = n_space / 1;                                                            // Low Pass Filter smoothing radius. Not in use
 constexpr float r0_f[3] = {(float)n_space / 8.0, (float)n_space / 8.0, (float)n_space / 4.0}; //  radius of sphere or cylinder (electron, ion, z-pinch plasma)
 
-constexpr float Bz0 = 0;     // in T, static constant fields
+constexpr float Bz0 = 0.00000;     // in T, static constant fields
 constexpr float Btheta0 = 0.00000; // in T, static constant fields
-constexpr float Ez0 = 0.0e0;       // in V/m
-constexpr float vz0 = 0.0f;
-constexpr float a0 = 4e-5;                          // typical dimensions of a cell in m This needs to be smaller than debye length otherwise energy is not conserved if a particle moves across a cell
+constexpr float Ez0 = 1.8e6;       // in V/m
+constexpr float vz0 = 1.0e7f;
+constexpr float a0 = 4e-5;                          // typical dimensions of a cell in m This needs to be smaller than debye length 2yuotherwise energy is not conserved if a particle moves across a cell
 constexpr float a0_ff = 1.0 + 1.0 / (float)n_space; // rescale cell size, if particles rollover this cannot encrement more than 1 cell otherwise will have fake "waves"
-constexpr float target_part = 1e12;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
+constexpr float target_part = 1e14;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
 constexpr float v0_r = 0;                           // initial directed radial velocity outwards is positive
 
 // The maximum expected E and B fields. If fields go beyond this, the the time step, cell size etc will be wrong. Should adjust and recalculate.
 //  maximum expected magnetic field
-constexpr float Bmax0 = Bz0 + Btheta0 + 0.0001; // in T earth's magnetic field is of the order of ~ 1e-4 T DPF ~ 100T
+constexpr float Bmax0 = Bz0 + Btheta0 + 0.1; // in T earth's magnetic field is of the order of ~ 1e-4 T DPF ~ 100T
 constexpr float Emax0 = Ez0 + 1;                // 1e11V/m is approximately interatomic E field -extremely large fields implies poor numerical stability
 
 // technical parameters
