@@ -1,6 +1,6 @@
 //#define RamDisk // whether to use RamDisk if no ramdisk files will be in temp directory
 #define maxcells 32
-#define cldevice 0 // 0 usually means integrated GPU
+//#define cldevice 0 // 0 usually means integrated GPU
 #define sphere     // do hot spot  problem
 #define spherez    // but allow particles to rollover in the z direction
                    // #define octant     // do hot spot problem 1/8 sphere. Magnetic fields do not make sense as will break symmetry
@@ -25,7 +25,7 @@ constexpr size_t nback_cy = nback *0;
 constexpr size_t nback_cube = nback - nback_cy;
 
 constexpr float R_s = n_space / 1;                                                            // Low Pass Filter smoothing radius. Not in use
-constexpr float r0_f[3] = {(float)n_space / 8.0, (float)n_space / 8.0, (float)n_space / 4.0}; //  radius of sphere or cylinder (electron, ion, z-pinch plasma)
+constexpr float r0_f[3] = {(float)n_space / 16.0, (float)n_space / 16.0, (float)n_space / 4.0}; //  radius of sphere or cylinder (electron, ion, z-pinch plasma)
 
 constexpr float Bz0 = 0;     // in T, static constant fields
 constexpr float Btheta0 = 0.00000; // in T, static constant fields
@@ -33,7 +33,7 @@ constexpr float Ez0 = 0.0e0;       // in V/m
 constexpr float vz0 = 0.0f;
 constexpr float a0 = 4e-5;                          // typical dimensions of a cell in m This needs to be smaller than debye length otherwise energy is not conserved if a particle moves across a cell
 constexpr float a0_ff = 1.0 + 0.5 / (float)n_space; // rescale cell size, if particles rollover this cannot increment more than 1 cell otherwise will have fake "waves"
-constexpr float target_part = 1e10;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
+constexpr float target_part = 1e11;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
 constexpr float v0_r = 0;                           // initial directed radial velocity outwards is positive
 
 // The maximum expected E and B fields. If fields go beyond this, the the time step, cell size etc will be wrong. Should adjust and recalculate.
@@ -47,7 +47,7 @@ constexpr float Emax0 = Ez0 + 1;                // 1e11V/m is approximately inte
 // a sphere 0.4 mm radius with 1e24*4/3*pi()*0.4^3 *1.6e-19C E on surface =2.4e12Vm-1 if all electrons have left.
 // r0=8*a0 Te 1e7,Td 1e7,B 100,E 1e10,nback 64, a0 1e-3,part 1e15,nspace 64 npartd *4 cylinder
 constexpr int ndatapoints = 50; // total number of time steps to print
-constexpr int nc1 = 100;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
+constexpr int nc1 = 50;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
 constexpr int md_me = 60;       // ratio of electron speed/deuteron speed at the same KE. Used to calculate electron motion more often than deuteron motion
 #define Hist_n 512
 // #define Hist_max Temp_e / 11600 * 60 // in eV Kelvin to eV is divide by 11600
@@ -66,8 +66,8 @@ constexpr int n_output_part = (n_partd > 9369) ? 9369 : n_partd; // maximum numb
 // #define UE_field // whether to calculate the total energy due to electric energy density
 // #define UE_cell // whether to calculate the EPE due to particles within a cell
 #define Bon_     // whether to calculate the internally generated magnetic (B) field
-#define dE_dton_ // whether to calculate the displacement current only usefull if both Eon_ and Bon_
-#define dB_dton_ // whether to calculate the displacement current only usefull if both Eon_ and Bon_
+//#define dE_dton_ // whether to calculate the maxwell displacement current only usefull if both Eon_ and Bon_
+//#define dB_dton_ // whether to calculate faraday only usefull if both Eon_ and Bon_
 // #define UB_field // whether to calculate the total energy due to magnetic energy density
 #define EFon_ // whether to apply electric force
 #define BFon_ // whether to apply magnetic force
