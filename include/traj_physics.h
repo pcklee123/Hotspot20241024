@@ -19,7 +19,7 @@ constexpr int n_space = 128; // should be 2 to power of n for faster FFT e.g. 32
 
 constexpr size_t n_partd =64 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n keep below 64*1024*1024 for 8GB GPU if n_space=128
 constexpr size_t n_parte = n_partd;
-constexpr size_t nback = n_partd /2; // background stationary particles distributed over all cells - improves stability
+constexpr size_t nback = n_partd /4; // background stationary particles distributed over all cells - improves stability
 //size of background cylinder for sphere
 constexpr size_t nback_cy = nback *0;
 constexpr size_t nback_cube = nback - nback_cy;
