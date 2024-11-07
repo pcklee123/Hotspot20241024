@@ -39,7 +39,7 @@ void generate_rand_sphere(particles *pt, par *par)
     // #pragma omp parallel for
     for (int p = 0; p < 2; p++)
     {
-        for (na = 0; na < nback_cube; ++na) // set particles in cube background
+        for (na = 0; na < nback; ++na) // set particles in cube background
         {
             pt->pos1x[p][na] = pt->pos0x[p][na] = uniform_dist(gen) * (par->posH_15[0] - par->posL_15[0]) + par->posL_15[0];
             pt->pos1y[p][na] = pt->pos0y[p][na] = uniform_dist(gen) * (par->posH_15[1] - par->posL_15[1]) + par->posL_15[1];
@@ -48,7 +48,7 @@ void generate_rand_sphere(particles *pt, par *par)
             // pt->m[p][na] = mp[p];
         }
         // #pragma omp parallel for num_threads(nthreads)
-        for (na = nback_cube; na < nback; ++na) // set particles in rod background
+        for (na = nback; na < nback_cy; ++na) // set particles in rod background
         {
             float r = r0[2] * pow(uniform_dist(gen), 0.5f);
             float x, y, z;
@@ -79,7 +79,7 @@ void generate_rand_sphere(particles *pt, par *par)
         // #pragma omp barrier
 
         // #pragma omp parallel for num_threads(nthreads)
-        for (int n = nback; n < n_partd; n++)  // set particles in spot
+        for (int n = nback_cy; n < n_partd; n++)  // set particles in spot
         {
 #ifdef Weibull
             float r = r0[p] * powf(weibull_dist(gen), 0.33333333333f);

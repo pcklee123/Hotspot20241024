@@ -1,6 +1,6 @@
 //#define RamDisk // whether to use RamDisk if no ramdisk files will be in temp directory
 #define maxcells 32
-//#define cldevice 0 // 0 usually means integrated GPU
+#define cldevice 0 // 0 usually means integrated GPU
 #define sphere     // do hot spot  problem
 #define spherez    // but allow particles to rollover in the z direction
                    // #define octant     // do hot spot problem 1/8 sphere. Magnetic fields do not make sense as will break symmetry
@@ -10,30 +10,30 @@
 constexpr float weibullb = 2; // b factor for weibull distribn. larger means closer to a shell. ~1 means filled more at the center.
 #define Temp_e 7e6            // in Kelvin 1e7 ~1keV
 #define Temp_d 7e6            // in Kelvin
-constexpr int f1 = 2000;      // make bigger to make smaller time steps // 300 is min for sphere slight increase in KE
+constexpr int f1 = 4000;      // make bigger to make smaller time steps // 300 is min for sphere slight increase in KE
 constexpr int f2 = f1 * 1.2;
 constexpr float incf = 1.1f;        // increment
 constexpr float decf = 1.0f / incf; // decrement factor
 
 constexpr int n_space = 128; // should be 2 to power of n for faster FFT e.g. 32,64,128,256 (128 is 2 million cells, ~ 1gB of ram, 256 is not practical for systems with 8GB or less GPU ram) dont go below 16. some code use 16vectors
 
-constexpr size_t n_partd =64 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n keep below 64*1024*1024 for 8GB GPU if n_space=128
+constexpr size_t n_partd = 64 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n
 constexpr size_t n_parte = n_partd;
-constexpr size_t nback = n_partd /4; // background stationary particles distributed over all cells - improves stability
+constexpr size_t nback = n_partd *.1; // background stationary particles distributed over all cells - improves stability
 //size of background cylinder for sphere
-constexpr size_t nback_cy = nback *0;
-constexpr size_t nback_cube = nback - nback_cy;
+constexpr size_t nback_cy = n_partd * 0.55;
+//constexpr size_t nback_cube = nback - nback_cy;
 
 constexpr float R_s = n_space / 1;                                                            // Low Pass Filter smoothing radius. Not in use
-constexpr float r0_f[3] = {(float)n_space / 16.0, (float)n_space / 16.0, (float)n_space / 4.0}; //  radius of sphere or cylinder (electron, ion, z-pinch plasma)
+constexpr float r0_f[3] = {(float)n_space / 8.0, (float)n_space / 8.0, (float)n_space / 4.0}; //  radius of sphere or cylinder (electron, ion, z-pinch plasma)
 
-constexpr float Bz0 = 0;     // in T, static constant fields
+constexpr float Bz0 = 0.00000;     // in T, static constant fields
 constexpr float Btheta0 = 0.00000; // in T, static constant fields
-constexpr float Ez0 = 0.0e0;       // in V/m
-constexpr float vz0 = 0.0f;
+constexpr float Ez0 = 1.8e6;       // in V/m
+constexpr float vz0 = 3.0e7f;
 constexpr float a0 = 4e-5;                          // typical dimensions of a cell in m This needs to be smaller than debye length otherwise energy is not conserved if a particle moves across a cell
-constexpr float a0_ff = 1.0 + 0.5 / (float)n_space; // rescale cell size, if particles rollover this cannot increment more than 1 cell otherwise will have fake "waves"
-constexpr float target_part = 1e11;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
+constexpr float a0_ff = 1.0 + 1.0 / (float)n_space; // rescale cell size, if particles rollover this cannot encrement more than 1 cell otherwise will have fake "waves"
+constexpr float target_part = 2e12;                 // 3.5e22 particles per m^3 per torr of ideal gas. 7e22 electrons for 1 torr of deuterium
 constexpr float v0_r = 0;                           // initial directed radial velocity outwards is positive
 
 // The maximum expected E and B fields. If fields go beyond this, the the time step, cell size etc will be wrong. Should adjust and recalculate.
@@ -47,7 +47,7 @@ constexpr float Emax0 = Ez0 + 1;                // 1e11V/m is approximately inte
 // a sphere 0.4 mm radius with 1e24*4/3*pi()*0.4^3 *1.6e-19C E on surface =2.4e12Vm-1 if all electrons have left.
 // r0=8*a0 Te 1e7,Td 1e7,B 100,E 1e10,nback 64, a0 1e-3,part 1e15,nspace 64 npartd *4 cylinder
 constexpr int ndatapoints = 50; // total number of time steps to print
-constexpr int nc1 = 50;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
+constexpr int nc1 = 200;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
 constexpr int md_me = 60;       // ratio of electron speed/deuteron speed at the same KE. Used to calculate electron motion more often than deuteron motion
 #define Hist_n 512
 // #define Hist_max Temp_e / 11600 * 60 // in eV Kelvin to eV is divide by 11600
@@ -66,8 +66,8 @@ constexpr int n_output_part = (n_partd > 9369) ? 9369 : n_partd; // maximum numb
 // #define UE_field // whether to calculate the total energy due to electric energy density
 // #define UE_cell // whether to calculate the EPE due to particles within a cell
 #define Bon_     // whether to calculate the internally generated magnetic (B) field
-//#define dE_dton_ // whether to calculate the maxwell displacement current only usefull if both Eon_ and Bon_
-//#define dB_dton_ // whether to calculate faraday only usefull if both Eon_ and Bon_
+#define dE_dton_ // whether to calculate the displacement current only usefull if both Eon_ and Bon_
+#define dB_dton_ // whether to calculate the displacement current only usefull if both Eon_ and Bon_
 // #define UB_field // whether to calculate the total energy due to magnetic energy density
 #define EFon_ // whether to apply electric force
 #define BFon_ // whether to apply magnetic force
