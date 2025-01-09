@@ -15,9 +15,9 @@ constexpr int f2 = f1 * 1.2;
 constexpr float incf = 1.2f;        // increment
 constexpr float decf = 1.0f / incf; // decrement factor
 
-constexpr int n_space = 128; // should be 2 to power of n for faster FFT e.g. 32,64,128,256 (128 is 2 million cells, ~ 1gB of ram, 256 is not practical for systems with 8GB or less GPU ram) dont go below 16. some code use 16vectors
+constexpr int n_space = 64; // should be 2 to power of n for faster FFT e.g. 32,64,128,256 (128 is 2 million cells, ~ 1gB of ram, 256 is not practical for systems with 8GB or less GPU ram) dont go below 16. some code use 16vectors
 
-constexpr size_t n_partd =16 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n
+constexpr size_t n_partd =1 * 1024 * 1024; // n_space * n_space * n_space ; // must be 2 to power of n
 constexpr size_t n_parte = n_partd;
 constexpr size_t nback = n_partd *.98; // background stationary particles distributed over all cells - improves stability
 //size of background cylinder for sphere
@@ -46,8 +46,8 @@ constexpr float Emax0 = Ez0 + 1;                // 1e11V/m is approximately inte
 // Te 1e7,Td 1e7,B 0.1,E 1e8,nback 64, a0 0.1e-3,part 1e10,nspace 32 npartd *4 sphere, r1=1.8
 // a sphere 0.4 mm radius with 1e24*4/3*pi()*0.4^3 *1.6e-19C E on surface =2.4e12Vm-1 if all electrons have left.
 // r0=8*a0 Te 1e7,Td 1e7,B 100,E 1e10,nback 64, a0 1e-3,part 1e15,nspace 64 npartd *4 cylinder
-constexpr int ndatapoints = 50; // total number of time steps to print
-constexpr int nc1 = 25;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
+constexpr int ndatapoints = 10; // total number of time steps to print
+constexpr int nc1 = 1;          // f1 * 1;      // number of times to calculate E and B between printouts total number of electron time steps calculated = ndatapoints *nc1*md_me
 constexpr int md_me = 60;       // ratio of electron speed/deuteron speed at the same KE. Used to calculate electron motion more often than deuteron motion
 #define Hist_n 512
 // #define Hist_max Temp_e / 11600 * 60 // in eV Kelvin to eV is divide by 11600
