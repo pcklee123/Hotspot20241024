@@ -30,6 +30,7 @@ Original code in 2021 by Hilary,Yin Yue and Chloe, extensive improvements by Sam
 - Tools: (GCC, code paraview)
 
 - Libs: (Opencl, OpenMP, vtk)
+sudo apt install ocl-icd-opencl-dev,libomp-dev
 
 ## Usage
 modify include/traj_physics.h
