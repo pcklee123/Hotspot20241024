@@ -10,9 +10,9 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 CC=clang++
 #CFLAGS= -pg -no-pie -L /usr/lib/x86_64-linux-gnu/vtk
-CFLAGS= -I$(IDIR) -I /usr/include/vtk-9.1  -march=native -malign-double -std=c++2b -fopenmp -fopenmp-simd 
+CFLAGS= -I$(IDIR) -I /usr/include/vtk-9.3  -march=native -malign-double -std=c++2b -fopenmp -fopenmp-simd 
 CFLAGS+= -O3 -mavx -mavx2 -mfma -ftree-vectorize -fno-omit-frame-pointer -funroll-loops -fno-signed-zeros -fno-trapping-math #-D_GLIBCXX_PARALLEL -fgcse-sm -fgcse-las  -flto=$(CPUS)
-LIBS+= -lomp -lvtkCommonCore-9.1 -lvtksys-9.1 -lvtkIOXML-9.1 -lvtkCommonDataModel-9.1 -lvtkIOCore-9.1
+LIBS+= -lomp -lvtkCommonCore-9.3 -lvtksys-9.3 -lvtkIOXML-9.3 -lvtkCommonDataModel-9.3 -lvtkIOCore-9.3
 AFLAGS= -fuse-ld=lld 
 else
 #ucrt64
